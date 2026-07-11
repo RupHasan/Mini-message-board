@@ -3,8 +3,10 @@ const pool = require("./db");
 const app = express();
 const port = 3000;
 app.use(express.json());
+app.use(express.static(__dirname));
 
-app.get("/", async (req, res) => {
+
+app.get("/show", async (req, res) => {
     const conn = await pool.getConnection();
     const results = await conn.query("SELECT * FROM miniMsgBoard");
 

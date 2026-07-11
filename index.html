@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Document</title>
+    </head>
+    <body>
+        <main>
+            <h1>Mini Message Board!</h1>
+            <button id="add-msg" onclick="addMsg()">Enter Message</button>
+
+            <dialog id="add-dialog">
+                <input type="text" id="username" name="username" />
+                <input type="textarea" id="msg" name="msg" />
+                <button id="submit" onclick="submit()">Submit</button>
+                <button id="close-dialog" onclick="document.getElementById('add-dialog').close()">Close</button>
+            </dialog>
+            
+            <section id="msg-container"></section>
+        </main>
+        
+        <script src="script.js"></script>
+    </body>
+</html>
