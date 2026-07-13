@@ -5,21 +5,39 @@ function addMsg() {
 async function submit() {
     const username = document.getElementById("username").value;
     const getMsg = document.getElementById("msg").value;
-    const postMsg = {
-        userName: username,
-        msg: getMsg
-    };
 
-    await fetch("/new", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(postMsg)
-    });
-    document.getElementById("add-dialog").close();
+    if (username == "admin-rh") {
+        const response = await fetch("/admin",{
+            method: "POST",
+            headers : {"Content-Type":"application/json"},
+            body: JSON.stringify({pass : getMsg})
+        });
+        console.log('ok ok')
+        
+        const data = await response.json()
+        
+        if (data.success) {
+            window.location.href = data.redirect;
+        } else {
+            alert("Wrong Password!")
+        }
+    } else {
+        const postMsg = {
+            userName: username,
+            msg: getMsg
+        };
 
-    document.getElementById("username").value = "";
-    document.getElementById("msg").value = "";
-    render();
+        await fetch("/new", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(postMsg)
+        });
+        document.getElementById("add-dialog").close();
+
+        document.getElementById("username").value = "";
+        document.getElementById("msg").value = "";
+        render();
+    }
 }
 
 function render() {
