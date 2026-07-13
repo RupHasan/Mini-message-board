@@ -1,14 +1,14 @@
 const express = require("express");
 const pool = require("./db");
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(__dirname));
 
 
 app.get("/show", async (req, res) => {
     const conn = await pool.getConnection();
-    const results = await conn.query("SELECT * FROM miniMsgBoard");
+    const [ results ] = await conn.query("SELECT * FROM miniMsgBoard");
 
     conn.release();
     res.json(results);
@@ -27,5 +27,5 @@ app.post("/new", async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server in running on port ${port}`);
+    console.log(`Server is running on port ${port}`);
 });

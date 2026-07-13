@@ -10,7 +10,7 @@ async function submit() {
         msg: getMsg
     };
 
-    await fetch("http://localhost:3000/new", {
+    await fetch("/new", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(postMsg)
@@ -25,7 +25,7 @@ async function submit() {
 function render() {
     document.getElementById("msg-container").innerHTML = "";
 
-    fetch("http://localhost:3000/show")
+    fetch("/show")
         .then(res => res.json())
         .then(data => {
             data.forEach(index => {
