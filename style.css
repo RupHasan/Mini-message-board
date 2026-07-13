@@ -49,7 +49,7 @@ dialog {
     padding: 2rem;
 }
 
-dialog input {
+#username,#msg{
     display: block;
     width: 100%;
     margin-bottom: 1rem;

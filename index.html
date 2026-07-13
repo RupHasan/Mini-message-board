@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>Document</title>
+        <title>Message Board | Rup Hasan</title>
         <link rel="stylesheet" href="style.css" media="all">
     </head>
     <body>
@@ -13,8 +13,8 @@
             <button id="add-msg" onclick="addMsg()">Enter Message</button>
 
             <dialog id="add-dialog">
-                <input type="text" id="username" name="username" />
-                <input type="msg" id="msg" name="msg" />
+                <input type="text" id="username" name="username" placeholder="Enter your username"/>
+                <textarea name="msg" id="msg" cols="30" rows="10" placeholder="Enter message"></textarea>
                 <button id="submit" onclick="submit()">Submit</button>
                 <button id="close-dialog" onclick="document.getElementById('add-dialog').close()">Close</button>
             </dialog>
