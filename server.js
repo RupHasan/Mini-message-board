@@ -115,7 +115,7 @@ app.put("/admin/:id", async (req, res) => {
         conn.release();
         res.json({success:true,messege:"Database updated!"})
     } else {
-        // will update very soon
+        res.status(403).json({success:false,messege:humiliation()})
     }
 });
 
@@ -128,10 +128,126 @@ app.delete("/admin/:id", async (req,res)=>{
         conn.release();
         res.json({success:true,messege:`Delete successful. ID ${delId}`})
     } else {
-        // will update very soon
+        res.status(403).json({success:false,messege:humiliation()})
     }
 })
+
+function humiliation() {
+    return `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>⚠️ INTRUSION DETECTED ⚠️</title>
+            <style>
+                body {
+                    background-color: #030005;
+                    color: #00ff41;
+                    font-family: 'Courier New', Courier, monospace;
+                    text-align: center;
+                    padding: 50px 20px;
+                    margin: 0;
+                    overflow-x: hidden;
+                }
+                .container {
+                    max-width: 800px;
+                    margin: 0 auto;
+                    border: 2px solid #ff0055;
+                    box-shadow: 0 0 20px #ff0055, inset 0 0 10px rgba(255, 0, 85, 0.2);
+                    background: #000;
+                    padding: 40px;
+                    border-radius: 8px;
+                }
+                h1 {
+                    color: #ff0055;
+                    font-size: 2.8rem;
+                    text-shadow: 0 0 15px #ff0055;
+                    margin-top: 0;
+                    animation: blink 1.5s infinite;
+                }
+                .roast-header {
+                    color: #ffcc00;
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    margin: 20px 0;
+                    text-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+                }
+                .terminal {
+                    background: #050505;
+                    border: 1px solid #333;
+                    padding: 20px;
+                    text-align: left;
+                    border-radius: 5px;
+                    margin: 30px 0;
+                    font-size: 0.95rem;
+                    line-height: 1.6;
+                }
+                .line {
+                    margin: 8px 0;
+                }
+                .error-text {
+                    color: #ff3333;
+                }
+                .success-text {
+                    color: #00ff41;
+                }
+                #user-ip {
+                    color: #ff0055;
+                    font-weight: bold;
+                    text-shadow: 0 0 5px rgba(255, 0, 85, 0.3);
+                }
+                .warning-footer {
+                    font-size: 1.1rem;
+                    color: #888;
+                    margin-top: 30px;
+                }
+                @keyframes blink {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.3; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>[!] EXPLOIT FAILURE [!]</h1>
+                
+                <p class="roast-header">"Bro really thought he was in Mr. Robot." 💀</p>
+                
+                <div class="terminal">
+                    <div class="line"><span class="error-text">[!] Warning:</span> Unauthorized execution attempted on restricted database resource.</div>
+                    <div class="line">> Analyzing attacker capability...</div>
+                    <div class="line">> Exploit Skill Level: <span class="error-text">0.02% (Absolute Amateur)</span></div>
+                    <div class="line">> bypass_status: <span class="error-text">FAILED (Lacked basic authorization credentials)</span></div>
+                    <div class="line">> Advice: Go back to inspecting elements on Google, buddy. This isn't for kids.</div>
+                    <div class="line">> Initiating counter-measures...</div>
+                    <div class="line">> Target IP Address: <span id="user-ip">Locating...</span></div>
+                    <div class="line" id="coord-line" style="display:none;">> Sending coordinates to closest authorities... <span class="error-text">[COMPLETE]</span></div>
+                </div>
+        
+                <p class="warning-footer">Take a deep breath, close this tab, and go do your homework.</p>
+            </div>
+        
+            <script>
+                fetch('https://api.ipify.org?format=json')
+                    .then(res => res.json())
+                    .then(data => {
+                        document.getElementById('user-ip').innerText = data.ip;
+                        document.getElementById('coord-line').style.display = 'block';
+                    })
+                    .catch(() => {
+                        document.getElementById('user-ip').innerText = '127.0.0.1 (Scared to reveal)';
+                    });
+            </script>
+        </body>
+        </html>
+        `
+}
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+
+// blah blah blah
+//res.status(403).send();

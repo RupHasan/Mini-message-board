@@ -34,9 +34,11 @@ async function changeMsg() {
         })
     });
     const data = await response.json();
-    if (data.status == 403) {
-        const humiliation = await response.text();
-        document.write(humiliation);
+
+    if (data.success == false) {
+        document.write(data.messege);
+    } else {
+        showTable();
     }
 }
 
@@ -51,8 +53,10 @@ async function deleteRow() {
         })
     });
     const data = await response.json();
-    if (data.status == 403) {
-        const humiliation = await response.text();
-        document.write(humiliation);
+
+    if (data.success == false) {
+        document.write(data.messege);
+    } else {
+        showTable();
     }
 }
