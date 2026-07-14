@@ -31,7 +31,7 @@ app.post("/new", async (req, res) => {
 app.post("/admin", (req, res) => {
     const givenPassword = req.body.givenPass;
 
-    if (givenPassword == (process.env.ADMIN_PASSWORD).trim()) {
+    if (givenPassword == process.env.ADMIN_PASSWORD.trim()) {
         res.send(`
             <main>
                 <h1>4 oparations. Your control boss!</h1>
@@ -65,11 +65,15 @@ app.post("/admin", (req, res) => {
                 <section id="deleteReq-container">
                     <h2>Delete any msg just by the id number</h2>
                     <input type="number" id="msg-to-del" placeholder="id number to Delete">
+                    <button onclick="deleteRow()">Delete</button>
                 </section>
             </main>
         
+            <script>
+                window.adminPass = "${givenPassword}";
+            </script>
             <script src="admin.js"></script>
-            `)
+            `);
     } else {
         res.status(401).send(`
             <!DOCTYPE html>
@@ -93,6 +97,40 @@ app.post("/admin", (req, res) => {
     `);
     }
 });
+
+// The admins power
+
+app.put("/admin/:id", async (req, res) => {
+    const changeId = parseInt(req.params.id);
+    const givenUsername = req.body.username;
+    const givenMsg = req.body.msg;
+    
+    if (req.body.password == process.env.ADMIN_PASSWORD.trim()) {
+        const conn = await pool.getConnection();
+        const results = await conn.query(
+                "UPDATE miniMsgBoard SET username = ?, msg = ? WHERE id = ?",
+                [givenUsername,givenMsg,changeId]
+            );
+
+        conn.release();
+        res.json({success:true,messege:"Database updated!"})
+    } else {
+        // will update very soon
+    }
+});
+
+app.delete("/admin/:id", async (req,res)=>{
+    const delId = parseInt(req.params.id);
+    
+    if (req.body.password == process.env.ADMIN_PASSWORD.trim()) {
+        const conn = await pool.getConnection()
+        const results = await conn.query("DELETE FROM miniMsgBoard WHERE id = ?",[delId])
+        conn.release();
+        res.json({success:true,messege:`Delete successful. ID ${delId}`})
+    } else {
+        // will update very soon
+    }
+})
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

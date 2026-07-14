@@ -1,13 +1,11 @@
 // This is a front-end file, dedicated for admin.html
-console.log('connected')
-
 function showTable() {
     document.getElementById("table-container").innerHTML = "";
 
     fetch("/show")
         .then(res => res.json())
-        .then((data) => {
-            data.forEach((index) => {
+        .then(data => {
+            data.forEach(index => {
                 document.getElementById("table-container").innerHTML += `
                     <div class='msg-sub-container'>
                       <h3>Id number is ${index.id}</h3>
@@ -20,3 +18,41 @@ function showTable() {
 }
 
 showTable();
+
+async function changeMsg() {
+    const changeId = Number(document.getElementById("givenId").value);
+    const newUsername = document.getElementById("username").value;
+    const newMsg = document.getElementById("msg").value;
+
+    const response = await fetch(`/admin/${changeId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            password: window.adminPass,
+            username: newUsername,
+            msg: newMsg
+        })
+    });
+    const data = await response.json();
+    if (data.status == 403) {
+        const humiliation = await response.text();
+        document.write(humiliation);
+    }
+}
+
+async function deleteRow() {
+    const delId = Number(document.getElementById("msg-to-del").value);
+
+    const response = await fetch(`/admin/${delId}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            password: window.adminPass
+        })
+    });
+    const data = await response.json();
+    if (data.status == 403) {
+        const humiliation = await response.text();
+        document.write(humiliation);
+    }
+}
