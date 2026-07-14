@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Admin Panel | Rup Hasan</title>
+    </head>
+    <body>
+        <main>
+            <div class="login-container">
+                <h3>
+                    If you have entered here, congrats! This page is for the
+                    develpers only, not for kids. But you have to enter by
+                    giving the password.
+                </h3>
+                <input
+                    type="password"
+                    id="getPassword"
+                    placeholder="Enter your password : "
+                />
+                <button id="check-pass" onclick="checkPassword()">Check</button>
+            </div>
+        </main>
+        
+        <script>
+            async function checkPassword() {
+                const password = document.getElementById("getPassword").value;
+                const sentToBackend = {
+                    givenPass: password
+                };
+                const response = await fetch("/admin", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(sentToBackend)
+                });
+                const data = await response.text();
+                document.write(data);
+            }
+        </script>
+    </body>
+</html>
