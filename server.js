@@ -31,7 +31,7 @@ function authUser(req, res, next) {
         } catch (err) {
             return res.send(`
                 <script>
-                    alert("Token is not verified! Must log in again.);
+                    alert("Token is not verified! Must log in again.");
                     window.location.href = "/login"
                 </script>
             `);
@@ -297,18 +297,36 @@ app.post("/signup", async (req, res) => {
     const { username, password, phnNumber, email } = req.body;
     const hash = await bcrypt.hash(password, 10);
     const conn = await pool.getConnection();
-    const [results] = await conn.query(
-        "INSERT INTO users (username, password, phone_number, email) VALUES (?,?,?,?)",
-        [username, hash, phnNumber || null, email || null]
-    );
-    
-    conn.release()
-    res.send(`
-        <script>
-            alert("Youre account has been created. Please log in with your username and password to continue.")
-            window.location.href = "/login"
-        </script>
+    try {
+        const [results] = await conn.query(
+            "INSERT INTO users (username, password, phone_number, email) VALUES (?,?,?,?)",
+            [username, hash, phnNumber || null, email || null]
+        );
+
+        res.send(`
+            <script>
+                alert("Youre account has been created. Please log in with your username and password to continue.")
+                window.location.href = "/login"
+            </script>
     `);
+    } catch (err) {
+        if (err.code == "ER_DUP_ENTRY") {
+        return res.send(`
+            <script>
+                alert("User with this username already exits! Please try again with another username")
+                window.location.href = "/login"
+            </script>
+        `);} else {
+            return res.send(`
+                <script>
+                    alert("Our database is down. We are working on it, please try again later.")
+                    window.location.href = "/login"
+                </script>
+            `)
+        }
+    } finally {
+        conn.release();
+    }
 });
 
 app.post("/login", async (req, res) => {
@@ -319,40 +337,42 @@ app.post("/login", async (req, res) => {
         [username]
     );
 
-    if (results.length == 0) {
-        return res
-            .status(401)
-            .sendFile(path.join(__dirname, "public", "login.html"));
-        return res.send(`
+    try {
+        if (results.length == 0) {
+            return res.status(401).send(`
             <script>
                 alert("User with this username does not exist in our database. Please sign in first.")
                 window.location.href = "/login"
             </script>
         `);
-    } else {
-        const check = await bcrypt.compare(password, results[0].password);
-        if (check) {
-            const token = jwt.sign(
-                { userId: results[0].id, username: results[0].username },
-                process.env.JWT_PASS
-            );
-            res.cookie("token", token, { httpOnly: true });
-            return res.send(`
+        } else {
+            const check = await bcrypt.compare(password, results[0].password);
+            if (check) {
+                const token = jwt.sign(
+                    { userId: results[0].id, username: results[0].username },
+                    process.env.JWT_PASS
+                );
+                res.cookie("token", token, { httpOnly: true });
+                return res.send(`
                 <script>
                     alert("Login successful!");
                     window.location.href = "/"
                 </script>
             `);
-        } else {
-            return res.status(401).send(`
+            } else {
+                return res.status(401).send(`
                     <script>
                         alert("Your password is incorrect!")
                         window.location.href = "/login"
                     </script>
                 `);
+            }
         }
+    } catch (err) {
+        res.send("An error occured! Will be fixed soon.");
+    } finally {
+        conn.release();
     }
-    conn.release()
 });
 
 app.listen(port, () => {
