@@ -1,10 +1,37 @@
+// Boilerplate code;
 require("dotenv").config();
 const express = require("express");
 const pool = require("./db");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const cookieParser = require("cookie-parser");
+const path = require("path");
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
-app.use(express.static(__dirname));
+app.use(cookieParser());
+app.use(express.urlencoded({ extented: true }));
+app.use(express.static("public"));
+
+function authUser(req, res, next) {
+    const token = req.cookies.token;
+    
+    if (!token) {
+        return res.status(401).sendFile(path.join(__dirname, "public", "login.html"))
+    } else {
+        try {
+            const decode = jwt.verify(token, process.env.JWT_PASS);
+            req.user = decode;
+            next();
+        } catch (err) {
+            return res.status(401).sendFile(path.join(__dirname,"public" ,"login.html"));
+        }
+    }
+}
+
+app.get("/", authUser, async (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "dashboard.html"))
+});
 
 app.get("/show", async (req, res) => {
     const conn = await pool.getConnection();
@@ -104,33 +131,36 @@ app.put("/admin/:id", async (req, res) => {
     const changeId = parseInt(req.params.id);
     const givenUsername = req.body.username;
     const givenMsg = req.body.msg;
-    
+
     if (req.body.password == process.env.ADMIN_PASSWORD.trim()) {
         const conn = await pool.getConnection();
         const results = await conn.query(
-                "UPDATE miniMsgBoard SET username = ?, msg = ? WHERE id = ?",
-                [givenUsername,givenMsg,changeId]
-            );
+            "UPDATE miniMsgBoard SET username = ?, msg = ? WHERE id = ?",
+            [givenUsername, givenMsg, changeId]
+        );
 
         conn.release();
-        res.json({success:true,messege:"Database updated!"})
+        res.json({ success: true, messege: "Database updated!" });
     } else {
-        res.status(403).json({success:false,messege:humiliation()})
+        res.status(403).json({ success: false, messege: humiliation() });
     }
 });
 
-app.delete("/admin/:id", async (req,res)=>{
+app.delete("/admin/:id", async (req, res) => {
     const delId = parseInt(req.params.id);
-    
+
     if (req.body.password == process.env.ADMIN_PASSWORD.trim()) {
-        const conn = await pool.getConnection()
-        const results = await conn.query("DELETE FROM miniMsgBoard WHERE id = ?",[delId])
+        const conn = await pool.getConnection();
+        const results = await conn.query(
+            "DELETE FROM miniMsgBoard WHERE id = ?",
+            [delId]
+        );
         conn.release();
-        res.json({success:true,messege:`Delete successful. ID ${delId}`})
+        res.json({ success: true, messege: `Delete successful. ID ${delId}` });
     } else {
-        res.status(403).json({success:false,messege:humiliation()})
+        res.status(403).json({ success: false, messege: humiliation() });
     }
-})
+});
 
 function humiliation() {
     return `
@@ -241,13 +271,65 @@ function humiliation() {
             </script>
         </body>
         </html>
-        `
+        `;
 }
+
+// Routs for login and sign up
+
+app.get("/login", (req,res)=>{
+    res.sendFile(path.join(__dirname, "public", "login.html"))
+})
+app.get("signup", (req,res)=>{
+    res.sendFile(path.join(__dirname, "public", "login.html"))
+})
+
+
+app.post("/signup", async (req, res) => {
+    const { username, password, phnNumber, email } = req.body;
+    const hash = await bcrypt.hash(password, 10);
+    const conn = await pool.getConnection();
+    const [results] = await conn.query(
+        "INSERT INTO users (username, password, phone_number, email) VALUES (?,?,?,?)",
+        [username, hash, phnNumber || null, email || null]
+    );
+    res.sendFile(path.join(__dirname, "public", "login.html"))
+});
+
+app.post("/login", async (req, res) => {
+    const { username, password } = req.body;
+    const conn = await pool.getConnection();
+    const [results] = await conn.query(
+        "SELECT * FROM users WHERE username = ?",
+        [username]
+    );
+
+    if (results.length == 0) {
+        return res.status(401).sendFile(path.join(__dirname, "public", "login.html"))
+    } else {
+        const check = await bcrypt.compare(password, results[0].password);
+        if (check) {
+            const token = jwt.sign(
+                { userId: results[0].id , username: results[0].username },
+                process.env.JWT_PASS
+            );
+            res.cookie("token", token, { httpOnly: true });
+            return res.send(`
+                <script>
+                    alert("Login successful!");
+                    window.location.href = "/"
+                </script>
+            `)
+        } else {
+            return res
+                .status(402)
+                .sendFile(path.join(__dirname, "public", "login.html"))
+        }
+    }
+});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-
 
 // blah blah blah
 //res.status(403).send();

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Login/Sign up page | Rup Hasan</title>
+    </head>
+    <body>
+        <h2 class="header">Sign up</h2>
+        <p class="description">New users must need to sign up!</p>
+        <p class="description">Username and password is must, but email and phone number are optional.</p>
+        <form action="/signup" method="POST">
+            <input
+                type="text"
+                name="username"
+                id="su-username"
+                placeholder="Enter username "
+                required
+            />
+            <input
+                type="password"
+                name="password"
+                id="su-password"
+                placeholder="Enter password "
+                required=""
+            />
+            <input
+                type="number"
+                name="phnNumber"
+                id="su-phn-number"
+                placeholder="Enter phone number "
+            />
+            <input
+                type="email"
+                name="email"
+                id="su-email"
+                placeholder="Enter email"
+            />
+            <span class="optional-txt">optional</span>
+            <button type="submit" id="create-account-btn">
+                Create New Account
+            </button>
+        </form>
+
+        <hr />
+
+        <h3>Login</h3>
+        <p class="description">Login only if you already have an account</p>
+        <form action="/login" method="POST">
+            <input
+                type="text"
+                name="username"
+                id="l-username"
+                placeholder="Enter username "
+            />
+            <input
+                type="password"
+                name="password"
+                id="l-password"
+                placeholder="Enter password "
+            />
+            <button type="submit">Log in</button>
+        </form>
+    </body>
+</html>
