@@ -15,22 +15,32 @@ app.use(express.static("public"));
 
 function authUser(req, res, next) {
     const token = req.cookies.token;
-    
+
     if (!token) {
-        return res.status(401).sendFile(path.join(__dirname, "public", "login.html"))
+        return res.send(`
+            <script>
+                alert("User is not logged in!");
+                window.location.href = "/login"
+            </script>
+        `);
     } else {
         try {
             const decode = jwt.verify(token, process.env.JWT_PASS);
             req.user = decode;
             next();
         } catch (err) {
-            return res.status(401).sendFile(path.join(__dirname,"public" ,"login.html"));
+            return res.send(`
+                <script>
+                    alert("Token is not verified! Must log in again.);
+                    window.location.href = "/login"
+                </script>
+            `);
         }
     }
 }
 
 app.get("/", authUser, async (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "dashboard.html"))
+    res.sendFile(path.join(__dirname, "public", "dashboard.html"));
 });
 
 app.get("/show", async (req, res) => {
@@ -276,13 +286,12 @@ function humiliation() {
 
 // Routs for login and sign up
 
-app.get("/login", (req,res)=>{
-    res.sendFile(path.join(__dirname, "public", "login.html"))
-})
-app.get("signup", (req,res)=>{
-    res.sendFile(path.join(__dirname, "public", "login.html"))
-})
-
+app.get("/login", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "login.html"));
+});
+app.get("/signup", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "login.html"));
+});
 
 app.post("/signup", async (req, res) => {
     const { username, password, phnNumber, email } = req.body;
@@ -292,7 +301,14 @@ app.post("/signup", async (req, res) => {
         "INSERT INTO users (username, password, phone_number, email) VALUES (?,?,?,?)",
         [username, hash, phnNumber || null, email || null]
     );
-    res.sendFile(path.join(__dirname, "public", "login.html"))
+    
+    conn.release()
+    res.send(`
+        <script>
+            alert("Youre account has been created. Please log in with your username and password to continue.")
+            window.location.href = "/login"
+        </script>
+    `);
 });
 
 app.post("/login", async (req, res) => {
@@ -304,12 +320,20 @@ app.post("/login", async (req, res) => {
     );
 
     if (results.length == 0) {
-        return res.status(401).sendFile(path.join(__dirname, "public", "login.html"))
+        return res
+            .status(401)
+            .sendFile(path.join(__dirname, "public", "login.html"));
+        return res.send(`
+            <script>
+                alert("User with this username does not exist in our database. Please sign in first.")
+                window.location.href = "/login"
+            </script>
+        `);
     } else {
         const check = await bcrypt.compare(password, results[0].password);
         if (check) {
             const token = jwt.sign(
-                { userId: results[0].id , username: results[0].username },
+                { userId: results[0].id, username: results[0].username },
                 process.env.JWT_PASS
             );
             res.cookie("token", token, { httpOnly: true });
@@ -318,13 +342,17 @@ app.post("/login", async (req, res) => {
                     alert("Login successful!");
                     window.location.href = "/"
                 </script>
-            `)
+            `);
         } else {
-            return res
-                .status(402)
-                .sendFile(path.join(__dirname, "public", "login.html"))
+            return res.status(401).send(`
+                    <script>
+                        alert("Your password is incorrect!")
+                        window.location.href = "/login"
+                    </script>
+                `);
         }
     }
+    conn.release()
 });
 
 app.listen(port, () => {
