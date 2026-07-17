@@ -1,82 +1,486 @@
+/* dashboard.css – Rup Hasan */
 :root {
-    /* Color Palette using Variables */
-    --bg-color: #0f172a;
-    --card-bg: #1e293b;
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --accent-color: #38bdf8;
-    --button-hover: #0ea5e9;
-    --border-radius: 12px;
+    --bg-primary: #faf9f6;
+    --bg-secondary: #f0efea;
+    --text-primary: #2c2c2c;
+    --text-secondary: #555555;
+    --text-muted: #888888;
+    --accent: #4a6fa5;
+    --accent-light: #6b8fc7;
+    --accent-dark: #3a5a8a;
+    --code-bg: #2d2d2d;
+    --code-text: #e8e8e8;
+    --code-border: #3d3d3d;
+    --file-tag: #e8f0fe;
+    --file-tag-text: #1a5a8c;
+    --list-bullet: #4a6fa5;
+    --shadow: rgba(0, 0, 0, 0.06);
+    --radius: 8px;
+    --border-light: #e0ddd6;
+    --white: #ffffff;
+    --danger: #c0392b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
 }
 
 body {
-    background-color: var(--bg-color);
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+        Arial, sans-serif;
+    background: var(--bg-primary);
     color: var(--text-primary);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    margin: 0;
-    padding: 2rem;
-    display: flex;
-    justify-content: center;
+    line-height: 1.7;
+    padding: 2rem 1.5rem;
+    max-width: 820px;
+    margin: 0 auto;
 }
 
-main {
-    max-width: 600px;
-    width: 100%;
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
 }
 
-h1 { text-align: center; color: var(--accent-color); }
+/* My marketing */
 
-/* Buttons */
-button {
-    background-color: var(--accent-color);
-    color: var(--bg-color);
+#my-name{
+    color: var(--accent-dark);
+    font-weight: 900;
+    font-style: italic;
+}
+
+#autoType {
+    color: var(--accent-light);
+    font-style: italic;
+    text-decoration: underline;
+    font-weight: 900;
+}
+
+/* ─── AUTO-TYPE HEADER – Your personal brand ─── */
+.autotype-container {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  padding: 0.8rem 1.2rem;
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  border-left: 4px solid var(--accent); 
+   display: inline-block;  /* fits content width */
+  /* letter-spacing: -0.01em; */
+  box-shadow: 0 2px 6px var(--shadow);
+}
+
+#my-name {
+  color: var(--accent-dark);
+  font-weight: 900;
+  font-style: italic;
+  position: relative;
+  display: inline-block;
+}
+
+/* Adds a subtle underline sparkle effect */
+#my-name::after {
+  content: "✨";
+  font-size: 0.8rem;
+  margin-left: 4px;
+  opacity: 0.7;
+}
+
+#autoType {
+  color: var(--accent-light);
+  font-style: italic;
+  text-decoration: underline;
+  font-weight: 900;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 4px;
+/*   display: inline-block;
+min-width: 80px; */ /* prevents jumping while typing */
+}
+
+/* ─── HORIZONTAL RULES – elegant dividers ─── */
+hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--accent-light) 20%,
+    var(--accent) 50%,
+    var(--accent-light) 80%,
+    transparent
+  );
+  margin: 2.5rem 0;
+  opacity: 0.6;
+  position: relative;
+}
+
+/* Fancy version: adds a subtle diamond/star in the center */
+hr::after {
+  content: "◆";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-primary);
+  padding: 0 0.5rem;
+  color: var(--accent);
+  font-size: 0.6rem;
+  opacity: 0.5;
+}
+
+/* Special styling for the final hr at the bottom */
+#the-end {
+  margin-top: 4rem;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--text-muted) 30%,
+    var(--text-muted) 70%,
+    transparent
+  );
+  height: 1px;
+  opacity: 0.3;
+}
+
+#the-end::after {
+  content: "✧  End of Messages  ✧";
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  background: var(--bg-primary);
+  padding: 0 0.8rem;
+  letter-spacing: 2px;
+  font-weight: 300;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+
+/* ─── SCROLL NAVIGATION BUTTONS ─── */
+#go-down-btn-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+  text-decoration: none;
+}
+
+#go-down-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: var(--white);
+  font-size: 1.8rem;
+  font-weight: 300;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px rgba(74, 111, 165, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+#go-down-btn:hover {
+  background: var(--accent-dark);
+  transform: translateY(2px) scale(1.05);
+  box-shadow: 0 6px 24px rgba(74, 111, 165, 0.45);
+}
+
+#go-down-btn:active {
+  transform: scale(0.92);
+}
+
+/* Add a subtle pulse animation to draw attention */
+#go-down-btn::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-light);
+  opacity: 0;
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* ─── OPTIONAL: GO UP BUTTON (appears when scrolled) ─── */
+#go-up-btn-container {
+  position: fixed;
+  bottom: 6rem; /* above the down button */
+  right: 2rem;
+  z-index: 1000;
+  text-decoration: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+#go-up-btn-container.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+#go-up-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+#go-up-btn:hover {
+  background: var(--accent);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(74, 111, 165, 0.3);
+}
+
+#go-up-btn:active {
+  transform: scale(0.92);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  #go-down-btn-container {
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+
+  #go-down-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 1.5rem;
+  }
+
+  #go-up-btn-container {
+    bottom: 5rem;
+    right: 1.5rem;
+  }
+
+  #go-up-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+  }
+}
+
+
+/* ─── RESPONSIVE TWEAKS ─── */
+@media (max-width: 600px) {
+  .autotype-container {
+    font-size: 1.1rem;
+    padding: 0.6rem 1rem;
+    display: block; /* full width on mobile */
+  }
+
+  #autoType {
+    min-width: 60px;
+  }
+
+  hr::after {
+    font-size: 0.5rem;
+    padding: 0 0.3rem;
+  }
+
+  #the-end::after {
+    font-size: 0.6rem;
+    padding: 0 0.5rem;
+  }
+}
+
+/* Button – primary action */
+#add-msg {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--white);
     border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: var(--border-radius);
-    font-weight: bold;
+    padding: 0.6rem 1.8rem;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+        background 0.2s,
+        transform 0.1s;
+    box-shadow: 0 2px 6px var(--shadow);
+    margin-bottom: 2rem;
+}
+
+#add-msg:hover {
+    background: var(--accent-dark);
+}
+
+#add-msg:active {
+    transform: scale(0.97);
+}
+
+/* ─── DIALOG – perfectly centered ─── */
+dialog {
+    border: none;
+    border-radius: var(--radius);
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    background: var(--white);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+dialog input,
+dialog textarea {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--bg-secondary);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 0.95rem;
+    background: var(--bg-primary);
+    transition: border-color 0.2s;
+}
+
+dialog input:focus,
+dialog textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.15);
+}
+
+dialog textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+dialog button {
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 0.95rem;
     cursor: pointer;
     transition: background 0.2s;
 }
 
-button:hover { background-color: var(--button-hover); }
-
-/* Dialog styling */
-dialog {
-    background-color: var(--card-bg);
-    color: var(--text-primary);
-    border: 1px solid var(--text-secondary);
-    border-radius: var(--border-radius);
-    padding: 2rem;
+#submit {
+    background: var(--accent);
+    color: var(--white);
+    margin-right: 0.5rem;
 }
 
-#username,#msg{
-    display: block;
-    width: 100%;
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    background: var(--bg-color);
-    border: 1px solid var(--text-secondary);
-    color: white;
+#submit:hover {
+    background: var(--accent-dark);
 }
 
-/* Message Cards */
-#msg-container { margin-top: 2rem; }
-
-.msg-sub-container {
-    background-color: var(--card-bg);
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
-    margin-bottom: 1rem;
-    border-left: 4px solid var(--accent-color);
-}
-
-.user-name {
-    font-weight: bold;
-    color: var(--accent-color);
-    margin: 0;
-}
-
-.actual-msg {
-    margin: 0.5rem 0 0 0;
+#close-dialog {
+    background: var(--bg-secondary);
     color: var(--text-secondary);
+}
+
+#close-dialog:hover {
+    background: #ddd8cf;
+}
+
+/* ─── MESSAGE CONTAINER ─── */
+#msg-container {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* center the cards */
+    gap: 1.2rem;
+}
+
+/* ─── MESSAGE CARD – 80% width ─── */
+.msg-sub-container {
+    width: 80vw; /* 80% of viewport width */
+    max-width: 820px; /* stops at a comfortable reading width */
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: 0 2px 8px var(--shadow);
+    border: 1px solid var(--bg-secondary);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.msg-sub-container:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* ─── USERNAME – bigger, bolder, with a subtle background ─── */
+.user-name {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--accent);
+    padding: 0.7rem 1.5rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-light);
+    margin: 0; /* override default p margins */
+}
+
+/* ─── MESSAGE – looks like a real message ─── */
+.actual-msg {
+    padding: 1.2rem 1.5rem;
+    background: #f5f4f0; /* subtly different from page bg */
+    color: var(--text-primary);
+    line-height: 1.6;
+    word-wrap: break-word;
+    margin: 0; /* override default p margins */
+    border-left: 4px solid var(--accent-light); /* visual anchor */
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+    body {
+        padding: 1.25rem;
+    }
+    h1 {
+        font-size: 2rem;
+    }
+    dialog {
+        padding: 1.5rem;
+        width: 95%;
+    }
+    .msg-sub-container {
+        width: 90vw; /* slightly wider on small screens */
+    }
+    .user-name {
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+    }
+    .actual-msg {
+        padding: 1rem;
+    }
 }

@@ -5,23 +5,52 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Message Board | Rup Hasan</title>
-        <link rel="stylesheet" href="style.css" media="all">
+        <link rel="stylesheet" href="style.css" media="all" />
     </head>
     <body>
         <main>
+            
+            <a href="#the-end" id="go-down-btn-container"><button id="go-down-btn">↓</button></a>
+            
             <h1>Mini Message Board!</h1>
+            <h2 class="autotype-container">
+                Created by <span id="my-name">Rup Hasan</span>, a
+                <span id="autoType"></span>
+            </h2>
+            
+            <hr>
+            
             <button id="add-msg" onclick="addMsg()">Enter Message</button>
 
             <dialog id="add-dialog">
-                <input type="text" id="username" name="username" placeholder="Enter your username"/>
-                <textarea name="msg" id="msg" cols="30" rows="10" placeholder="Enter message"></textarea>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter your username"
+                />
+                <textarea
+                    name="msg"
+                    id="msg"
+                    cols="30"
+                    rows="10"
+                    placeholder="Enter message"
+                ></textarea>
                 <button id="submit" onclick="submit()">Submit</button>
-                <button id="close-dialog" onclick="document.getElementById('add-dialog').close()">Close</button>
+                <button
+                    id="close-dialog"
+                    onclick="document.getElementById('add-dialog').close()"
+                >
+                    Close
+                </button>
             </dialog>
-            
+
             <section id="msg-container"></section>
+            
+            <hr id="the-end">
         </main>
-        
+
+        <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.16/dist/typed.umd.js"></script>
         <script src="script.js"></script>
     </body>
 </html>

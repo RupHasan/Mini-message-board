@@ -1,0 +1,141 @@
+/* login.css – Rup Hasan */
+:root {
+  --bg-primary: #faf9f6;
+  --bg-secondary: #f0efea;
+  --text-primary: #2c2c2c;
+  --text-secondary: #555555;
+  --text-muted: #888888;
+  --accent: #4a6fa5;
+  --accent-light: #6b8fc7;
+  --accent-dark: #3a5a8a;
+  --code-bg: #2d2d2d;
+  --code-text: #e8e8e8;
+  --code-border: #3d3d3d;
+  --file-tag: #e8f0fe;
+  --file-tag-text: #1a5a8c;
+  --list-bullet: #4a6fa5;
+  --shadow: rgba(0, 0, 0, 0.06);
+  --radius: 8px;
+  --border-light: #e0ddd6;
+  --white: #ffffff;
+  --danger: #c0392b;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  padding: 2rem 1.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Headers */
+h2.header {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.25rem;
+}
+
+h3 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 2rem 0 0.25rem 0;
+}
+
+.description {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  margin-bottom: 1.2rem;
+}
+
+/* Forms */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+form input {
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--bg-secondary);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 0.95rem;
+  background: var(--white);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+form input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.15);
+}
+
+form input::placeholder {
+  color: var(--text-muted);
+}
+
+.optional-txt {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: -0.3rem;
+  margin-bottom: 0.3rem;
+  font-style: italic;
+}
+
+/* Buttons */
+form button {
+  padding: 0.7rem 1.8rem;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--accent);
+  color: var(--white);
+  transition: background 0.2s, transform 0.1s;
+  box-shadow: 0 2px 6px var(--shadow);
+  align-self: flex-start;
+}
+
+form button:hover {
+  background: var(--accent-dark);
+}
+
+form button:active {
+  transform: scale(0.97);
+}
+
+/* Horizontal rule */
+hr {
+  border: none;
+  border-top: 2px solid var(--bg-secondary);
+  margin: 2.5rem 0;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  body {
+    padding: 1.25rem;
+  }
+  h2.header {
+    font-size: 1.8rem;
+  }
+  h3 {
+    font-size: 1.4rem;
+  }
+  form button {
+    width: 100%;
+    text-align: center;
+  }
+}

@@ -1,3 +1,31 @@
+let type = new Typed("#autoType", {
+    strings: ["Programmer", "Student", "Web Developer", "Front-end Developer", "Back-end Developer", "Full Stack Developer"],
+    typeSpeed: 150,
+    backSpeed: 150,
+    loop: true
+});
+
+
+// ─── FADE OUT "GO DOWN" BUTTON AT BOTTOM ───
+const endElement = document.getElementById('the-end');
+const downBtnContainer = document.getElementById('go-down-btn-container');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // User sees the bottom – hide the down button
+      downBtnContainer.style.opacity = '0';
+      downBtnContainer.style.pointerEvents = 'none'; // prevent clicks
+    } else {
+      // Not at bottom – show the down button
+      downBtnContainer.style.opacity = '1';
+      downBtnContainer.style.pointerEvents = 'auto';
+    }
+  });
+}, { threshold: 0.1 }); // 0.1 = 10% visible is enough
+
+observer.observe(endElement);
+
 function addMsg() {
     document.getElementById("add-dialog").showModal();
 }
