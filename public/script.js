@@ -68,3 +68,13 @@ function render() {
 }
 
 render();
+
+window.addEventListener('load', function() {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+});
+
+
+// Delete it after connecting to web socket.
+setInterval(()=>{
+    render();
+},10000)
