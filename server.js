@@ -43,7 +43,7 @@ app.get("/", authUser, async (req, res) => {
     res.sendFile(path.join(__dirname, "public", "dashboard.html"));
 });
 
-app.get("/show", async (req, res) => {
+app.get("/show", authUser, async (req, res) => {
     const conn = await pool.getConnection();
     const [results] = await conn.query("SELECT * FROM miniMsgBoard");
 
@@ -51,13 +51,13 @@ app.get("/show", async (req, res) => {
     res.json(results);
 });
 
-app.post("/new", async (req, res) => {
+app.post("/new", authUser, async (req, res) => {
     const userName = req.body.userName;
     const msg = req.body.msg;
     const conn = await pool.getConnection();
     const results = await conn.query(
         "INSERT INTO miniMsgBoard (username,msg) VALUES (?,?)",
-        [userName, msg]
+        [req.user.username, msg]
     );
     conn.release();
     res.json({ success: true, username: userName, msg: msg });
