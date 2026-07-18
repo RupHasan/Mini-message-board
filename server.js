@@ -369,7 +369,7 @@ app.post("/login", async (req, res) => {
             }
         }
     } catch (err) {
-        res.send("An error occured! Will be fixed soon.");
+        res.send(`An error occured! Will be fixed soon. The error -> ${err}`);
     } finally {
         conn.release();
     }
